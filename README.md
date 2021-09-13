@@ -1,2 +1,2 @@
 # fighter
-un projet de jeu de castagne
+tu cherche la gare ou la bagarre
