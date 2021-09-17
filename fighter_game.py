@@ -8,7 +8,8 @@ class Fighter:
         self.__name = name #__=attribut privé
         self.__description = description
         self.__agility = randrange(1,9)
-        self.__healthPoints = 100
+        self.__health_points = 100
+        self.__weapon = None
 
     def get_name(self):
         """Return the name of the fighter"""
@@ -30,9 +31,9 @@ class Fighter:
         """Return the strength of the fighter"""
         return 10 - self.get_agility()
 
-    def get_healthPoints(self):
+    def get_health_points(self):
         """Return the health of the fighter"""
-        return self.__healthPoints
+        return self.__health_points
 
     def punch(self, a_fighter):
         """
@@ -40,8 +41,8 @@ class Fighter:
         return the health points of a Fighter
         """
         points = int(uniform(0.7,1.0)*10*self.get_strength()/a_fighter.get_agility())
-        a_fighter.__healthPoints =   a_fighter.get_healthPoints() - points
-        return a_fighter.__healthPoints
+        a_fighter.__health_points =   a_fighter.get_health_points() - points
+        return a_fighter.__health_points
 
     def summary(self):
         """Return the summary of a fighter"""
@@ -49,8 +50,94 @@ class Fighter:
         description = 'description : ' + self.get_description()
         agility = 'agility : ' + str(self.get_agility())
         strength = 'strength : ' + str(self.get_strength())
-        healthPoints = 'healthPoints : ' + str(self.get_healthPoints())
-        summary = '\n'.join([name, description, agility, strength, healthPoints])
-        # if self.get_weapon():
-            # summary += self.get_weapon().summary()
+        health_points = 'health_points : ' + str(self.get_health_points())
+        summary = '\n'.join([name, description, agility, strength, health_points])
+        if self.take_weapon():
+            summary += self.take_weapon().summary()
         return summary
+
+    def shoot(self, a_fighter):
+        """Shoot a fighter and return the fighter health points"""
+        if self.get_ammos()>0:
+            lostPoints = int(self.get_damage() / a_fighter.get_agility())
+            lostPoints = int(lostPoints * uniform(0.5,1)) # some random added
+            a_fighter.__health_points = a_fighter.get_health_points() - lostPoints
+            self.__ammos -= 1 # remove one ammo
+        return a_fighter.get_health_points()
+
+    def take_weaopn(self, a_weapon):
+        if self.__weapon == None:
+            self.__weapon == a_weapon
+        return self.__weapon
+
+
+
+class Weapon:
+    """The base class of a weapon"""
+    def __init__(self, name, damage, ammos):
+        self.__name = name
+        self.__damage = damage
+        self.__ammos = ammos
+        self.__owner = None
+
+    def get_name(self):
+        """Returns the name of the weapon"""
+        return self.__name
+
+    def get_damage(self):
+        """Returns the damage of the weapon"""
+        return self.__damage
+
+    def get_ammos(self):
+        """Returns the ammo of the weapon"""
+        return self.__ammos
+
+    def get_owner(self):
+        """Returns the owner of the weapon"""
+        return self.__owner
+
+    def summary(self):
+        """Return the summary of a weapon"""
+        name = 'name : ' + self.get_name()
+        damage = 'damage : ' + str(self.get_damage())
+        ammos = 'ammo : ' + str(self.get_ammos())
+        owner = 'owner : ' + str(self.get_owner())
+        return '\n'.join([name, damage, ammos, owner])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fighter_a = Fighter("Erik Zemmour", "Il aime pas les mohammed")
+fighter_b = Fighter("Crackhead", "Il cuisine bien")
+machette = Weapon("machette haitienne", 13, 3)
