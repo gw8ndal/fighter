@@ -10,6 +10,9 @@ class Fighter:
         self.__agility = randrange(1,9)
         self.__health_points = 100
         self.__weapon = None
+        
+    def __repr__(self):
+        return self.get_name()
 
     def get_name(self):
         """Return the name of the fighter"""
@@ -35,6 +38,10 @@ class Fighter:
         """Return the health of the fighter"""
         return self.__health_points
 
+    def get_weapon(self):
+        """Return the weapon of the fighter"""
+        return self.__weapon
+
     def punch(self, a_fighter):
         """
         Punch a Fighter
@@ -56,20 +63,15 @@ class Fighter:
             summary += self.take_weapon().summary()
         return summary
 
-    def shoot(self, a_fighter):
-        """Shoot a fighter and return the fighter health points"""
-        if self.get_ammos()>0:
-            lostPoints = int(self.get_damage() / a_fighter.get_agility())
-            lostPoints = int(lostPoints * uniform(0.5,1)) # some random added
-            a_fighter.__health_points = a_fighter.get_health_points() - lostPoints
-            self.__ammos -= 1 # remove one ammo
-        return a_fighter.get_health_points()
-
-    def take_weaopn(self, a_weapon):
-        if self.__weapon == None:
-            self.__weapon == a_weapon
+    def take_weapon(self, a_weapon):
+        if self.__weapon != None:
+            self.__weapon.set_owner(None)
+            self.__weapon = a_weapon
+            a_weapon.set_owner(self)
+        else:
+            self.__weapon = a_weapon
+            a_weapon.set_owner(self)
         return self.__weapon
-
 
 
 class Weapon:
@@ -79,6 +81,9 @@ class Weapon:
         self.__damage = damage
         self.__ammos = ammos
         self.__owner = None
+
+    def __repr__(self):
+        return self.get_name()
 
     def get_name(self):
         """Returns the name of the weapon"""
@@ -95,6 +100,10 @@ class Weapon:
     def get_owner(self):
         """Returns the owner of the weapon"""
         return self.__owner
+        
+    def set_owner(self, owner):
+        """Returns the owner of the weapon"""
+        self.__owner = owner
 
     def summary(self):
         """Return the summary of a weapon"""
@@ -104,7 +113,14 @@ class Weapon:
         owner = 'owner : ' + str(self.get_owner())
         return '\n'.join([name, damage, ammos, owner])
 
-
+    def shoot(self, a_fighter):
+        """Shoot a fighter and return the fighter health points"""
+        if self.get_ammos()>0:
+            lostPoints = int(self.get_damage() / a_fighter.get_agility())
+            lostPoints = int(lostPoints * uniform(0.5,1)) # some random added
+            a_fighter.__health_points = a_fighter.get_health_points() - lostPoints
+            self.__ammos -= 1 # remove one ammo
+        return a_fighter.get_health_points()
 
 
 
@@ -141,3 +157,4 @@ class Weapon:
 fighter_a = Fighter("Erik Zemmour", "Il aime pas les mohammed")
 fighter_b = Fighter("Crackhead", "Il cuisine bien")
 machette = Weapon("machette haitienne", 13, 3)
+
