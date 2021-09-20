@@ -14,12 +14,20 @@ class Fighter:
     def __repr__(self):
         return self.get_name()
 
-    def get_name(self):
-        """Return the name of the fighter"""
+    def get_name(self):     #Doctests, pour tester directement les méthodes
+        """Return the name of the fighter
+        >>> fighter_a = Fighter("Nicolas sarkozy", "Il aime pas les mohammed")
+        >>> fighter_a.get_name()
+        'Nicolas sarkozy'
+        """
         return self.__name
 
     def get_description(self):
-        """Return the description of the fighter"""
+        """Return the description of the fighter
+        >>> fighter_a = Fighter("Nicolas sarkozy", "Il aime pas les mohammed")
+        >>> fighter_a.get_description()
+        'Il aime pas les mohammed'
+        """
         return self.__description
 
     def set_description(self, description):
@@ -66,11 +74,8 @@ class Fighter:
     def take_weapon(self, a_weapon):
         if self.__weapon != None:
             self.__weapon.set_owner(None)
-            self.__weapon = a_weapon
-            a_weapon.set_owner(self)
-        else:
-            self.__weapon = a_weapon
-            a_weapon.set_owner(self)
+        self.__weapon = a_weapon
+        a_weapon.set_owner(self)
         return self.__weapon
 
 
@@ -158,3 +163,6 @@ fighter_a = Fighter("Erik Zemmour", "Il aime pas les mohammed")
 fighter_b = Fighter("Crackhead", "Il cuisine bien")
 machette = Weapon("machette haitienne", 13, 3)
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
